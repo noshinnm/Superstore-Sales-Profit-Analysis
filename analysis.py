@@ -1,6 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# Load data
 df = pd.read_csv("data/Sample - Superstore.csv", encoding="latin1")
 
 print("=== OVERALL SUMMARY ===")
@@ -45,3 +45,52 @@ discount_summary["Profit Margin %"] = (
 )
 
 print(discount_summary)
+
+
+region_analysis = df.groupby("Region")[["Sales", "Profit"]].sum()
+
+region_analysis["Profit Margin %"] = (
+    region_analysis["Profit"] / region_analysis["Sales"] * 100
+)
+
+print("\nRegional Analysis:")
+print(region_analysis)
+
+region_analysis["Sales"].plot(
+    kind="bar",
+    title="Sales by Region"
+)
+
+plt.xlabel("Region")
+plt.ylabel("Sales")
+plt.tight_layout()
+plt.show()
+
+
+segment_analysis = df.groupby("Segment")[["Sales", "Profit"]].sum()
+
+segment_analysis["Profit Margin %"] = (
+    segment_analysis["Profit"] / segment_analysis["Sales"] * 100
+)
+
+print("\n=== SEGMENT ANALYSIS ===")
+print(segment_analysis)
+
+segment_analysis["Profit"].plot(
+    kind="bar",
+    title="Profit by Segment"
+)
+
+plt.xlabel("Segment")
+plt.ylabel("Profit")
+plt.tight_layout()
+plt.show()
+
+print("\n=== KEY BUSINESS FINDINGS ===")
+
+print("1. Technology has the highest profit margin among categories.")
+print("2. Furniture has a much lower overall profit margin.")
+print("3. Tables are loss-making, while Furnishings are profitable.")
+print("4. Higher discounts are strongly associated with lower profit margins.")
+print("5. West has the highest regional profit margin.")
+print("6. Home Office has the highest profit margin among customer segments.")
