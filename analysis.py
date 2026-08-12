@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 df = pd.read_csv("data/Sample - Superstore.csv", encoding="latin1")
 
@@ -94,3 +95,25 @@ print("3. Tables are loss-making, while Furnishings are profitable.")
 print("4. Higher discounts are strongly associated with lower profit margins.")
 print("5. West has the highest regional profit margin.")
 print("6. Home Office has the highest profit margin among customer segments.")
+
+
+tables_discount = df[df["Sub-Category"] == "Tables"].groupby("Discount")[["Sales", "Profit"]].sum()
+
+tables_discount["Profit Margin %"] = (
+    tables_discount["Profit"] / tables_discount["Sales"] * 100
+)
+
+tables_discount["Profit Margin %"].plot(
+    kind="line",
+    marker="o",
+    title="Tables: Discount vs Profit Margin"
+)
+
+plt.xlabel("Discount")
+plt.ylabel("Profit Margin %")
+plt.tight_layout()
+
+os.makedirs("visualizations", exist_ok=True)
+
+plt.savefig("visualizations/table_discount_profit_margin.png")
+plt.show()
